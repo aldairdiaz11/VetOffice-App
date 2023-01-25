@@ -1,0 +1,23 @@
+{% extends "vetoffice/base.html" %}
+
+{% load static %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'vetoffice/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <p>Welcome, {{ name | lower }}</p>
+
+{% comment %}  {% if pets.3.animal_type == "dog" %}
+    <p>The animal is a dog</p>
+  {% elif pets.animal_type == 'cat' %}
+    <p>The animal is a cat</p>
+  {% endif %}{% endcomment %}
+
+  {% for pet in pets|dictsort:"petname" %}
+    <p>{{ pet.petname }}: {{ pet.animal_type }}</p>
+  {% endfor %}
+
+{% endblock %}
