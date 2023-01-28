@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import Owner, Patient
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-# from django.http import HttpResponse
+from django.http import Http404
 
 
 pets = [
@@ -19,6 +19,10 @@ def home(request):
         "name": "Aldair",
         "pets": pets
         }
+    try:
+        Patient.objects.get(pk=1)
+    except Patient.DoesNotExist:
+        raise Http404()
     return render(request, "vetoffice/home.html", context=context)
 
 
