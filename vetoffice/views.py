@@ -1,8 +1,8 @@
-from django.shortcuts import render
+# from django.shortcuts import render
 from .models import Owner, Patient
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.http import Http404
+# from django.http import Http404
 from .forms import OwnerCreateForm, PatientCreateForm
 
 pets = [
