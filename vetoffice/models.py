@@ -13,6 +13,9 @@ class Owner(models.Model):
     def has_multiple_pets(self):
         return self.patient_set.count() > 1
 
+    def get_absolute_url(self):
+        return "list"
+
 
 class Patient(models.Model):
     # Choices

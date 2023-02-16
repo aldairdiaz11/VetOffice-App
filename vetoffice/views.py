@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from .models import Owner, Patient
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import Http404
-
+from .forms import OwnerCreateForm, PatientCreateForm
 
 pets = [
     {'petname': 'Fido', 'animal_type': 'dog'},
@@ -14,16 +14,13 @@ pets = [
 
 
 # Create your views here.
-def home(request):
-    context = {
-        "name": "Aldair",
-        "pets": pets
-        }
-    try:
-        Patient.objects.get(pk=1)
-    except Patient.DoesNotExist:
-        raise Http404()
-    return render(request, "vetoffice/home.html", context=context)
+class Home(TemplateView):
+    template_name = "vetoffice/home.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context["pets"] = pets
+        return context
 
 
 class OwnerList(ListView):
@@ -39,13 +36,13 @@ class PatientList(ListView):
 class OwnerCreate(CreateView):
     model = Owner
     template_name = "vetoffice/owner_create_form.html"
-    fields = ["first_name", "last_name", "phone"]
+    form_class = OwnerCreateForm
 
 
 class PatientCreate(CreateView):
     model = Patient
     template_name = "vetoffice/patient_create_form.html"
-    fields = ["animal_type", "breed", "pet_name", "age", "owner"]
+    form_class = PatientCreateForm
 
 
 class OwnerUpdate(UpdateView):
