@@ -12,3 +12,15 @@ class PatientCreateForm(forms.ModelForm):
     class Meta:
         model = Patient
         fields = ["pet_name", "animal_type", "breed", "age", "owner"]
+
+
+class OwnerUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Owner
+        fields = ["first_name", "last_name", "phone"]
+
+
+class PatientUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Patient
+        fields = ["pet_name", "animal_type", "breed", "age", "owner"]

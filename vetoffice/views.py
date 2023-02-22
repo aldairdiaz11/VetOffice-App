@@ -2,8 +2,10 @@
 from .models import Owner, Patient
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-# from django.http import Http404
-from .forms import OwnerCreateForm, PatientCreateForm
+from .forms import OwnerCreateForm, PatientCreateForm, OwnerUpdateForm, PatientUpdateForm
+from django.contrib.auth import authenticate, login
+from django.shortcuts import redirect, render
+from django.http import HttpResponse
 
 pets = [
     {'petname': 'Fido', 'animal_type': 'dog'},
@@ -48,13 +50,13 @@ class PatientCreate(CreateView):
 class OwnerUpdate(UpdateView):
     model = Owner
     template_name = "vetoffice/owner_update_form.html"
-    fields = ["first_name", "last_name", "phone"]
+    form_class = OwnerUpdateForm
 
 
 class PatientUpdate(UpdateView):
     model = Patient
     template_name = "vetoffice/patient_update_form.html"
-    fields = ["animal_type", "breed", "pet_name", "age", "owner"]
+    form_class = PatientUpdateForm
 
 
 class OwnerDelete(DeleteView):
@@ -65,3 +67,22 @@ class OwnerDelete(DeleteView):
 class PatientDelete(DeleteView):
     model = Patient
     template_name = "vetoffice/patient_delete_form.html"
+
+
+# Login and authenticate
+def login_view(request):
+    context = {
+        "login_view": "active"
+    }
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            return redirect("home")
+        else:
+            return HttpResponse("invalid credentials")
+
+    return render(request, "registration/login.html", context)

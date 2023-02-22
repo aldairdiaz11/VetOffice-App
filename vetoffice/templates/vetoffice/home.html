@@ -7,17 +7,9 @@
 {% endblock %}
 
 {% block content %}
-
-  <p>Welcome, {{ name | lower }}</p>
-
-{% comment %}  {% if pets.3.animal_type == "dog" %}
-    <p>The animal is a dog</p>
-  {% elif pets.animal_type == 'cat' %}
-    <p>The animal is a cat</p>
-  {% endif %}{% endcomment %}
-
-  {% for pet in pets|dictsort:"petname" %}
-    <p>{{ pet.petname }}: {{ pet.animal_type }}</p>
-  {% endfor %}
-
+<div>
+  <a href="{% url 'ownerlist' %}">Owners</a>
+  <a href="{% url 'patientlist' %}">Patients</a>
+  <a href="">Appointments</a>
+</div>
 {% endblock %}
