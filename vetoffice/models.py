@@ -14,7 +14,7 @@ class Owner(models.Model):
         return self.patient_set.count() > 1
 
     def get_absolute_url(self):
-        return "list"
+        return "/owner/list"
 
 
 class Patient(models.Model):
@@ -46,6 +46,9 @@ class Patient(models.Model):
     # Methods
     def __str__(self):
         return f"{self.pet_name}, {self.animal_type}"
+
+    def get_absolute_url(self):
+        return "/patient/list"
 
     # Metadata
     class Meta:

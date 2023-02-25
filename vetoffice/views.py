@@ -6,6 +6,10 @@ from .forms import OwnerCreateForm, PatientCreateForm, OwnerUpdateForm, PatientU
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import logout
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
 
 pets = [
     {'petname': 'Fido', 'animal_type': 'dog'},
@@ -21,16 +25,16 @@ class Home(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context["pets"] = pets
+        # context["name"] = request.user
         return context
 
 
-class OwnerList(ListView):
+class OwnerList(LoginRequiredMixin, ListView):
     model = Owner
     template_name = "vetoffice/owner_list.html"
 
 
-class PatientList(ListView):
+class PatientList(ListView, LoginRequiredMixin):
     model = Patient
     template_name = "vetoffice/patient_list.html"
 
@@ -47,24 +51,24 @@ class PatientCreate(CreateView):
     form_class = PatientCreateForm
 
 
-class OwnerUpdate(UpdateView):
+class OwnerUpdate(UpdateView, LoginRequiredMixin):
     model = Owner
     template_name = "vetoffice/owner_update_form.html"
     form_class = OwnerUpdateForm
 
 
-class PatientUpdate(UpdateView):
+class PatientUpdate(UpdateView, LoginRequiredMixin):
     model = Patient
     template_name = "vetoffice/patient_update_form.html"
     form_class = PatientUpdateForm
 
 
-class OwnerDelete(DeleteView):
+class OwnerDelete(DeleteView, LoginRequiredMixin):
     model = Owner
     template_name = "vetoffice/owner_delete_form.html"
 
 
-class PatientDelete(DeleteView):
+class PatientDelete(DeleteView, LoginRequiredMixin):
     model = Patient
     template_name = "vetoffice/patient_delete_form.html"
 
@@ -81,8 +85,20 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
+            login(request=request, user=user)
             return redirect("home")
         else:
             return HttpResponse("invalid credentials")
 
     return render(request, "registration/login.html", context)
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('home')
+
+
+class SignUp(CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy("login")
+    template_name = "registration/signup.html"

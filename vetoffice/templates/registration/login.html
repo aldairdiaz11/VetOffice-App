@@ -1,6 +1,25 @@
+<head>
+  <title>Sign Up</title>
+  <style>
+    body {
+        font-family: Arial, SansSerif, serif;
+    }
+    input[type=submit] {
+        background-color: #4caf50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+  </style>
+
+</head>
+
 {% block content %}
   <h1>Log in!</h1>
-  <form method="post" action="{% url 'login' %}">
+  <form class="login" method="post" action="{% url 'login' %}">
     {% csrf_token %}
     <label for="username">Username:
       <input type="text" name="username" placeholder="Username">
